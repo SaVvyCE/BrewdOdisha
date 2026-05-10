@@ -2,8 +2,8 @@
 
 > Discover the best cafes in Bhubaneswar — explore vibes, plan your day, and build your perfect coffee itinerary.
 
-**Live site →** [brewdodisha.vercel.app](https://brewdodisha-final.vercel.app)
-**Instagram →** [@brewdodisha](https://instagram.com/brewd_odisha)
+**Live site →** [brewdodisha-final.vercel.app](https://brewdodisha-final.vercel.app)
+**Instagram →** [@brewd-odisha](https://instagram.com/brewd_odisha)
 
 ---
 
