@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Explore — BrewdOdisha</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:         #0c0b09;
+      --bg2:        #131109;
+      --surface:    #181510;
+      --border:     #2a2418;
+      --border2:    #3a3020;
+      --orange:     #f07d35;
+      --orange-lt:  #f5a06a;
+      --orange-dk:  #c45e18;
+      --orange-dim: rgba(240,125,53,0.10);
+      --orange-glow:rgba(240,125,53,0.22);
+      --cream:      #f0ede6;
+      --muted:      #6b6055;
+      --muted2:     #8a7a6a;
+      --warm:       #c8a66a;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content:'';
+      position:fixed; inset:0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      pointer-events:none;
+      z-index:999;
+    }
+
+    .orb { position:fixed; border-radius:50%; pointer-events:none; filter:blur(140px); }
+    .orb-1 { width:700px; height:500px; top:-180px; left:50%; transform:translateX(-50%); background:radial-gradient(ellipse,rgba(240,125,53,0.09) 0%,transparent 70%); animation:orbFloat1 7s ease-in-out infinite; }
+    .orb-2 { width:400px; height:400px; bottom:-100px; right:-80px; background:radial-gradient(ellipse,rgba(200,166,106,0.07) 0%,transparent 70%); animation:orbFloat2 9s ease-in-out infinite; }
+    .orb-3 { width:300px; height:300px; bottom:30%; left:-60px; background:radial-gradient(ellipse,rgba(240,125,53,0.05) 0%,transparent 70%); animation:orbFloat2 11s ease-in-out infinite reverse; }
+    @keyframes orbFloat1 { 0%,100%{opacity:.7;transform:translateX(-50%) scale(1)} 50%{opacity:1;transform:translateX(-50%) scale(1.06)} }
+    @keyframes orbFloat2 { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:.9;transform:scale(1.1)} }
+
+    /* NAV */
+    nav {
+      position:fixed; top:0; left:0; right:0; z-index:50;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:1.1rem 2.5rem;
+      background:rgba(12,11,9,0.78);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+      animation:navIn .8s cubic-bezier(.16,1,.3,1) both;
+    }
+    @keyframes navIn { from{opacity:0;transform:translateY(-16px)} to{opacity:1;transform:translateY(0)} }
+
+    .nav-left { display:flex; align-items:center; gap:.8rem; }
+    .brand { display:flex; flex-direction:column; gap:1px; }
+    .brand-name { font-family:'Space Mono',monospace; font-size:.78rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--orange); line-height:1; }
+    .brand-sub { font-family:'DM Sans',sans-serif; font-size:.6rem; font-weight:300; letter-spacing:.2em; text-transform:uppercase; color:var(--muted2); line-height:1; }
+    .nav-right { display:flex; align-items:center; gap:1.8rem; }
+    .nav-link { font-family:'Space Mono',monospace; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted2); text-decoration:none; }
+    .nav-link.active { color:var(--orange); }
+    .nav-badge { font-family:'Space Mono',monospace; font-size:.58rem; letter-spacing:.1em; text-transform:uppercase; color:var(--orange); background:var(--orange-dim); border:1px solid rgba(240,125,53,0.3); border-radius:999px; padding:.28rem .75rem; }
+
+    /* HERO */
+    .hero {
+      min-height:100vh;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:8rem 2rem 4rem;
+      text-align:center;
+    }
+
+    .rule { display:flex; align-items:center; gap:1rem; margin-bottom:2.2rem; animation:fadeUp .9s cubic-bezier(.16,1,.3,1) .15s both; }
+    .rule-line { height:1px; background:linear-gradient(90deg,transparent,var(--border2),transparent); flex:1; max-width:80px; }
+    .rule-text { font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.25em; text-transform:uppercase; color:var(--orange); }
+
+    /* CUP */
+    .cup-stage { position:relative; width:160px; margin:0 auto 2.8rem; animation:fadeUp .9s cubic-bezier(.16,1,.3,1) .25s both; }
+    .cup-svg { animation:cupFloat 5s ease-in-out infinite; display:block; margin:0 auto; filter:drop-shadow(0 24px 40px rgba(240,125,53,0.18)); }
+    @keyframes cupFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+
+    .steam-row { position:absolute; top:-28px; left:50%; transform:translateX(-50%); display:flex; gap:9px; align-items:flex-end; }
+    .s { border-radius:2px; background:linear-gradient(to top,rgba(240,125,53,.5),transparent); animation:steamUp 2.2s ease-in-out infinite; }
+    .s1{width:2px;height:26px;animation-delay:0s}
+    .s2{width:2px;height:18px;animation-delay:.45s}
+    .s3{width:2px;height:22px;animation-delay:.9s}
+    .s4{width:2px;height:14px;animation-delay:1.3s}
+    @keyframes steamUp { 0%{opacity:0;transform:translateY(6px) scaleX(1)} 35%{opacity:.75} 100%{opacity:0;transform:translateY(-14px) scaleX(1.4)} }
+
+    .cup-glow { position:absolute; bottom:-16px; left:50%; transform:translateX(-50%); width:80px; height:12px; background:radial-gradient(ellipse,rgba(240,125,53,0.25),transparent 70%); border-radius:50%; animation:glowPulse 5s ease-in-out infinite; }
+    @keyframes glowPulse { 0%,100%{width:80px;opacity:.6} 50%{width:55px;opacity:1} }
+
+    .hero-eyebrow { font-family:'Space Mono',monospace; font-size:.62rem; letter-spacing:.28em; text-transform:uppercase; color:var(--orange-lt); margin-bottom:1.1rem; animation:fadeUp .9s cubic-bezier(.16,1,.3,1) .35s both; }
+
+    h1 { font-family:'Playfair Display',serif; font-size:clamp(3.2rem,7vw,6rem); font-weight:700; line-height:1.02; letter-spacing:-.025em; color:var(--cream); margin-bottom:.5rem; animation:fadeUp .9s cubic-bezier(.16,1,.3,1) .45s both; }
+    h1 .italic { font-style:italic; color:var(--orange); }
+
+    .hero-tagline { font-family:'Playfair Display',serif; font-size:clamp(1rem,2.2vw,1.5rem); font-style:italic; color:var(--warm); opacity:.85; margin-bottom:2rem; animation:fadeUp .9s cubic-bezier(.16,1,.3,1) .55s both; }
+
+    .hero-desc { max-width:440px; margin:0 auto 2.8rem; font-size:.9rem; font-weight:300; color:var(--muted2); line-height:1.85; animation:fadeUp .9s cubic-bezier(.16,1,.3,1) .65s both; }
+
+    /* PROGRESS */
+    .progress-block { max-width:340px; margin:0 auto 3rem; animation:fadeUp .9s cubic-bezier(.16,1,.3,1) .72s both; }
+    .progress-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:.55rem; }
+    .progress-label { font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); }
+    .progress-pct { font-family:'Space Mono',monospace; font-size:.7rem; font-weight:700; color:var(--orange); }
+    .progress-track { height:3px; background:var(--border2); border-radius:999px; overflow:hidden; }
+    .progress-fill { height:100%; width:0; background:linear-gradient(90deg,var(--orange-dk),var(--orange),var(--orange-lt)); border-radius:999px; animation:fillBar 2s cubic-bezier(.4,0,.2,1) 1.2s both; }
+    @keyframes fillBar { from{width:0} to{width:62%} }
+
+    /* CHIPS */
+    .chips { display:flex; flex-wrap:wrap; gap:.5rem; justify-content:center; animation:fadeUp .9s cubic-bezier(.16,1,.3,1) .8s both; }
+    .chip { font-family:'Space Mono',monospace; font-size:.58rem; letter-spacing:.12em; text-transform:uppercase; padding:.38rem 1rem; border-radius:999px; border:1px solid var(--border2); color:var(--muted); }
+    .chip.on { border-color:rgba(240,125,53,.35); color:var(--orange-lt); background:var(--orange-dim); }
+
+    .section-divider { width:100%; max-width:700px; margin:5rem auto 0; height:1px; background:linear-gradient(90deg,transparent,var(--border2) 30%,var(--border2) 70%,transparent); animation:fadeUp .9s cubic-bezier(.16,1,.3,1) .9s both; }
+
+    /* CARDS */
+    .cards-section { padding:4rem 2rem 6rem; max-width:1000px; margin:0 auto; animation:fadeUp .9s cubic-bezier(.16,1,.3,1) 1s both; }
+    .cards-eyebrow { font-family:'Space Mono',monospace; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); text-align:center; margin-bottom:2.5rem; }
+    .cards-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+    .card { background:var(--bg2); padding:2rem; display:flex; flex-direction:column; gap:.8rem; }
+    .card-icon { font-size:1.4rem; line-height:1; }
+    .card-title { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:700; color:var(--cream); }
+    .card-desc { font-size:.82rem; font-weight:300; color:var(--muted2); line-height:1.7; }
+    .card-tag { font-family:'Space Mono',monospace; font-size:.55rem; letter-spacing:.15em; text-transform:uppercase; color:var(--orange); margin-top:auto; }
+
+    /* FOOTER */
+    footer { border-top:1px solid var(--border); padding:1.5rem 2.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+    .footer-brand { font-family:'Space Mono',monospace; font-size:.65rem; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); }
+    .footer-brand span { color:var(--orange); }
+    .footer-back { font-family:'Space Mono',monospace; font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted2); text-decoration:none; display:flex; align-items:center; gap:.5rem; }
+    .back-arr { display:inline-block; }
+
+    .corner { position:fixed; width:36px; height:36px; border-color:rgba(240,125,53,0.18); border-style:solid; pointer-events:none; }
+    .c-tl { top:1.2rem; left:1.2rem; border-width:1px 0 0 1px; }
+    .c-tr { top:1.2rem; right:1.2rem; border-width:1px 1px 0 0; }
+    .c-bl { bottom:1.2rem; left:1.2rem; border-width:0 0 1px 1px; }
+    .c-br { bottom:1.2rem; right:1.2rem; border-width:0 1px 1px 0; }
+
+    .caret { display:inline-block; width:3px; height:0.85em; background:var(--orange); margin-left:4px; vertical-align:middle; border-radius:1px; animation:caret 1.1s step-end infinite; }
+    @keyframes caret { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+    @media(max-width:640px){
+      nav { padding:.9rem 1.2rem; }
+      .nav-right { display:none; }
+      h1 { font-size:3rem; }
+      .cards-grid { grid-template-columns:1fr; }
+      footer { flex-direction:column; align-items:center; text-align:center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="corner c-tl"></div>
+  <div class="corner c-tr"></div>
+  <div class="corner c-bl"></div>
+  <div class="corner c-br"></div>
+
+  <nav>
+    <div class="nav-left">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 13 L9 26 Q16 28.5 23 26 L25 13 Z" fill="#1e1208" stroke="#f07d35" stroke-width="1" stroke-opacity=".6"/>
+        <ellipse cx="16" cy="13" rx="9" ry="2.5" fill="#251808" stroke="#f07d35" stroke-width="1" stroke-opacity=".7"/>
+        <ellipse cx="16" cy="13" rx="7.5" ry="1.8" fill="#1a0f05"/>
+        <path d="M14 12.5 Q14 11.5 15.2 11.5 Q16 11.5 16.2 12.3 Q16.5 11.5 17.2 11.5 Q18.5 11.5 18.5 12.5 Q18.5 14 16 15 Q13.5 14 14 12.5Z" fill="#c8781a" opacity=".7"/>
+        <path d="M25 15.5 Q30 15.5 30 20 Q30 24.5 25 24" stroke="#f07d35" stroke-width="1.5" stroke-opacity=".5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="brand">
+        <span class="brand-name">BrewdOdisha</span>
+        <span class="brand-sub">Discover · Sip · Explore</span>
+      </div>
+    </div>
+    <div class="nav-right">
+      <a href="javascript:history.back()" class="nav-link">Home</a>
+      <a href="#" class="nav-link active">Explore</a>
+      <a href="#" class="nav-link">Cafés</a>
+      <span class="nav-badge">WIP</span>
+    </div>
+  </nav>
+
+  <section class="hero">
+
+    <div class="rule">
+      <div class="rule-line"></div>
+      <span class="rule-text">Work in Progress</span>
+      <div class="rule-line"></div>
+    </div>
+
+    <div class="cup-stage">
+      <div class="steam-row">
+        <div class="s s1"></div>
+        <div class="s s2"></div>
+        <div class="s s3"></div>
+        <div class="s s4"></div>
+      </div>
+
+      <svg class="cup-svg" width="150" height="150" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="75" cy="124" rx="48" ry="8" fill="#1a1208" stroke="#f07d35" stroke-width="1" stroke-opacity=".25"/>
+        <ellipse cx="75" cy="124" rx="36" ry="4.5" fill="none" stroke="#f07d35" stroke-width=".5" stroke-opacity=".15"/>
+        <path d="M30 60 L38 112 Q75 124 112 112 L120 60 Z" fill="#181008" stroke="#f07d35" stroke-width="1.2" stroke-opacity=".45"/>
+        <ellipse cx="75" cy="60" rx="45" ry="10" fill="#1e1408" stroke="#f07d35" stroke-width="1.3" stroke-opacity=".55"/>
+        <ellipse cx="75" cy="60" rx="40" ry="8.5" fill="#1a0d04"/>
+        <path d="M64 58 Q64 53.5 68.5 53.5 Q71.5 53.5 73 56 Q74.5 53.5 77.5 53.5 Q82 53.5 82 58 Q82 63.5 73 68 Q64 63.5 64 58Z" fill="#d4883a" opacity=".55"/>
+        <ellipse cx="73" cy="60.5" rx="2.5" ry="1.5" fill="#d4883a" opacity=".3"/>
+        <path d="M120 70 Q142 70 142 88 Q142 106 120 104" stroke="#f07d35" stroke-width="2.2" stroke-opacity=".45" fill="none" stroke-linecap="round"/>
+        <path d="M31 75 L119 75" stroke="#f07d35" stroke-width=".6" stroke-opacity=".12"/>
+        <text x="75" y="96" text-anchor="middle" font-family="serif" font-size="9" fill="#f07d35" opacity=".25" letter-spacing="1">BO</text>
+      </svg>
+
+      <div class="cup-glow"></div>
+    </div>
+
+    <p class="hero-eyebrow">Explore Bhubaneswar's café scene</p>
+    <h1>Something's<br/><span class="italic">Brewing</span><span class="caret"></span></h1>
+    <p class="hero-tagline">Still steeping. Worth the wait.</p>
+
+    <p class="hero-desc">
+      We're hand-crafting the full Explore experience — curated café trails, 
+      mood-based discoveries, hidden gems, and much more across Bhubaneswar. 
+      Check back soon.
+    </p>
+
+    <div class="progress-block">
+      <div class="progress-head">
+        <span class="progress-label">Build Progress</span>
+        <span class="progress-pct">62%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="chips">
+      <span class="chip on">Café Trails</span>
+      <span class="chip on">Mood Filter</span>
+      <span class="chip on">AI Planner</span>
+      <span class="chip">Photo Stories</span>
+      <span class="chip">Hidden Gems</span>
+      <span class="chip">Events</span>
+      <span class="chip">Reviews</span>
+    </div>
+
+    <div class="section-divider"></div>
+  </section>
+
+  <section class="cards-section">
+    <p class="cards-eyebrow">What's coming</p>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">☕</div>
+        <div class="card-title">Café Trails</div>
+        <div class="card-desc">Handpicked multi-stop routes through Bhubaneswar's best café neighbourhoods. Walk, sip, repeat.</div>
+        <div class="card-tag">Coming soon</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌤</div>
+        <div class="card-title">Mood Discovery</div>
+        <div class="card-desc">Feeling cozy? Need to work? Want a date spot? Filter cafés by vibe and let us guide you there.</div>
+        <div class="card-tag">Coming soon</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <div class="card-title">BrewBot Planner</div>
+        <div class="card-desc">Our AI builds a personalised café itinerary for your day — just tell it what you're in the mood for.</div>
+        <div class="card-tag">In progress · 62%</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">📸</div>
+        <div class="card-title">Photo Stories</div>
+        <div class="card-desc">Community-submitted café photography. Real vibes, real places — no stock images, ever.</div>
+        <div class="card-tag">Coming soon</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-brand"><span>BrewdOdisha</span> — Bhubaneswar's café map</span>
+    <a href="javascript:history.back()" class="footer-back">
+      <span class="back-arr">←</span> Back to BrewdOdisha
+    </a>
+  </footer>
+
+</body>
+</html>

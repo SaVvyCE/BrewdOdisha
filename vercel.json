@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "brewdodisha.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "explore-wip.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "Images/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/explore-wip$",
+      "headers": {
+        "Location": "/explore-wip.html"
+      },
+      "status": 308
+    },
+    {
+      "src": "/explore-wip\\.html",
+      "dest": "/explore-wip.html"
+    },
+    {
+      "src": "/Images/(.*)",
+      "dest": "/Images/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/server.js"
+    }
+  ]
+}
