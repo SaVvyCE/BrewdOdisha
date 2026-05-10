@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Test User",
+    "email": "testuser@example.com",
+    "passwordHash": "70da98444467b2b35beaeffb24cb77e8:71cd97cfbad2ea40e08cb1725d2be1e925d80979db858d4af9405d9952588380424a9ecb6a523d57a597467e56c39fb67266e746910b05b91bb5f79fec57b952"
+  },
+  {
+    "name": "sdsd",
+    "email": "sdsd@gmail.com",
+    "passwordHash": "de919db325f98cf12c21d0873273be1d:fc93cdeec9a54dbf60677117451d9ae0c04e0c4d478d917f0b6f85b5d2a538c4519c62856955ed42db5eefedc99978dc8254552f328c825b11ca41a0884a9733"
+  },
+  {
+    "name": "zxc",
+    "email": "gggg@gmail.com",
+    "passwordHash": "3dd56b79c0a674f119184338b39322b2:a9430f651757156dd4d8dae8979154efd6fa5e9e446006ff02a2564906c1888b69ef424811c808554ef7aec664820a9c894c52855f2f6aa70b744164bb2a7d24"
+  }
+]
